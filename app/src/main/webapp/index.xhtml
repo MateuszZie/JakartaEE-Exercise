@@ -1,27 +1,44 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html" 
+      xmlns:p="http://primefaces.org/ui">
+      
     <h:head>
-        <title>Facelet Title</title>
+        <title>JakartaEE Exercise Index page</title>
     </h:head>
     <h:body>
-        Hello from Facelets
+        <h:form>
+            <h3 style="left: 38%; position: relative">Customer List<h:commandButton style="position: relative; left: 50px;" value="New Customer" action="#{apiService.formCustomer('')}" /></h3>
+            
 
-        <!--<FORM action="http://example.com/api/v1/users" method="post">-->
-        <!--<p>-->
+            <p:dataTable value="#{apiService.allCustomer}" var="cust" >
+                <p:column headerText="Id">
+                    <h:outputText value="#{cust.id}" />
+                </p:column>
 
-                <!--Email: <INPUT type="text" name="email" tabindex="1"/>-->
-                <!--Password: <INPUT type="password" name="password" tabindex="2"/>-->
+                <p:column headerText="Identyfikator">
+                    <h:outputText value="#{cust.identyfikator}" />
+                </p:column>
 
-        <!--</p>-->
-        <!--</FORM>-->
+                <p:column headerText="Name">
+                    <h:outputText value="#{cust.name}" />
+                </p:column>
 
-        <h2><a href="basic-chat.html">Basic Chat</a></h2>
-        <h2><a href="params.html">Chat Params</a></h2>
-
-
-
+                <p:column headerText="Email">
+                    <h:outputText value="#{cust.email}" />
+                </p:column>
+                <p:column headerText="PhoneNumber">
+                    <h:outputText value="#{cust.phoneNumber}" />
+                </p:column>
+                <p:column headerText="">
+                    <h:commandButton value="Update" action="#{apiService.formCustomer(cust.identyfikator)}" />
+                </p:column>
+                <p:column headerText="">
+                    <h:commandButton value="Delete" action="#{apiService.deleteCustomer(cust.id)}" />
+                </p:column>
+            </p:dataTable>
+</h:form>
     </h:body>
 </html>
 
