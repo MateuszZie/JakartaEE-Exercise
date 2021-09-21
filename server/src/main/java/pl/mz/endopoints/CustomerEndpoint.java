@@ -24,46 +24,48 @@ import pl.mz.service.QueryService;
  */
 @Path("customer")
 public class CustomerEndpoint {
-    
+
     @Inject
     QueryService queryService;
-    
+
     @Inject
     PersistanceService persistanceService;
-    
+
     @GET
-    public List<Customer> getCustmers(){
+    public List<Customer> getCustmers() {
         return queryService.getCustomers();
     }
-    
+
+    @GET
+    @Path("identy")
+    public List<String> getIdentyfikators() {
+        return queryService.getIdentyfikators();
+    }
+
     @GET
     @Path("{identifier}")
-    public Customer getCustomer(@PathParam("identifier")String id){
+    public Customer getCustomer(@PathParam("identifier") String id) {
         Customer customer = queryService.getCustomer(id);
-        if(customer==null){
-            throw new NotFoundException("Customer with this id not available");
-        }
         return customer;
     }
-    
+
     @POST
     @Path("new")
-    public Customer createCustomer(Customer customer){
-       return persistanceService.saveCustomer(customer);
-    }
-    
-    @PUT
-    @Path("update")
-    public Customer updateCustomer(Customer customer){
+    public Customer createCustomer(Customer customer) {
         return persistanceService.saveCustomer(customer);
     }
-    
+
+    @PUT
+    @Path("update")
+    public Customer updateCustomer(Customer customer) {
+        return persistanceService.saveCustomer(customer);
+    }
+
     @DELETE
     @Path("delete/{id}")
-    public void deleteCustomer(@PathParam("id")Long id){
-        
-       persistanceService.deleteCustomer(id);
+    public void deleteCustomer(@PathParam("id") Long id) {
+
+        persistanceService.deleteCustomer(id);
     }
-    
-    
+
 }

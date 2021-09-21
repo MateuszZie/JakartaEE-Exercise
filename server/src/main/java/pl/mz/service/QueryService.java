@@ -17,17 +17,23 @@ import pl.mz.entities.Customer;
  */
 @Stateless
 public class QueryService {
-    
+
     @Inject
     EntityManager entityManager;
-    
-    public List<Customer> getCustomers(){
-        return entityManager.createNamedQuery(Customer.GET_ALL_CUSTOMERS,Customer.class).getResultList();
+
+    public List<Customer> getCustomers() {
+        return entityManager.createNamedQuery(Customer.GET_ALL_CUSTOMERS, Customer.class).getResultList();
     }
-    
-    public Customer getCustomer(String id){
-      List<Customer> customers = entityManager.createNamedQuery(Customer.GET_CUSTOMER_BY_IDENTIFIER, Customer.class).setParameter("id", id).getResultList();
-      if(customers.isEmpty()) return null;
-      return customers.get(0);
+
+    public Customer getCustomer(String id) {
+        List<Customer> customers = entityManager.createNamedQuery(Customer.GET_CUSTOMER_BY_IDENTIFIER, Customer.class).setParameter("id", id).getResultList();
+        if (customers.isEmpty()) {
+            return null;
+        }
+        return customers.get(0);
+    }
+
+    public List<String> getIdentyfikators() {
+        return entityManager.createNamedQuery(Customer.GET_ALL_IDENTIFIER, String.class).getResultList();
     }
 }

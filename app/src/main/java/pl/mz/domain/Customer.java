@@ -5,6 +5,7 @@
  */
 package pl.mz.domain;
 
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;

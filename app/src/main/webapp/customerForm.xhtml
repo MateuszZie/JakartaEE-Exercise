@@ -2,26 +2,32 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html" 
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
         <title>Add/Update Customer</title>
+        <script>  
+</script>  
     </h:head>
-    <h:body>
-        <h:form style="position: relative; left: 40%">
-            <h2 style="position: relative; left: 120px; top: 10px">Customer</h2>
+    <h:body>       
+        <h:form style="position: relative; left: 35%; width: 450px; top: 30px">
+            <p:growl id="growl" showDetail="true" sticky="true" />
+            <p:panel header="Customer">
             <h:panelGrid columns="2" cellpadding="7">
-                <h:outputText value="Identyfikator"/>
-                <p:inputText value="#{editCustomer.identyfikator}" required="true" requiredMessage="Identyfikator can't be empty"/>
+                <p:outputLabel for="identyfikator" value="Identyfikator"/>
+                <p:inputText id="identyfikator" value="#{editCustomer.identyfikator}" required="true" requiredMessage="Identyfikator must be set" validatorMessage="Identyfikator must be less ther 32 characters">
+                    <f:validateLength maximum="32"/>
+                </p:inputText>
                 <h:outputText value="Name"/>
                 <p:inputText value="#{editCustomer.name}" />
                 <h:outputText value="Email"/>
                 <p:inputText value="#{editCustomer.email}" />
                 <h:outputText value="PhoneNumber"/>
                 <p:inputText value="#{editCustomer.phoneNumber}" />
-                <h:commandButton value="Add/Update" action="#{apiService.addUpdateCustomer(editCustomer)}" />
+                <p:commandButton style="position: relative; left: 120px;" value="Add/Update" action="#{apiService.addUpdateCustomer(editCustomer)}" update="growl"/>
             </h:panelGrid>
-
+            </p:panel>
         </h:form>
     </h:body>
 </html>
