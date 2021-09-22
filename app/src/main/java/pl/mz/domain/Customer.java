@@ -6,6 +6,7 @@
 package pl.mz.domain;
 
 
+import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
@@ -21,7 +22,7 @@ import lombok.Setter;
 @Setter
 @Named
 @RequestScoped
-public class Customer{
+public class Customer implements Serializable{
       
        
     private Long id;

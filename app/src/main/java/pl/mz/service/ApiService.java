@@ -13,6 +13,7 @@ import java.util.concurrent.TimeoutException;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -32,6 +33,7 @@ import pl.mz.domain.Customer;
 @RequestScoped
 @Named
 public class ApiService {
+    
 
     private boolean serverBusy;
 
@@ -58,7 +60,7 @@ public class ApiService {
     public List<Customer> getAllCustomer() {
         WebTarget customerWebTarget = webTarget.path("customer");
         try{
-             return customerWebTarget.request(MediaType.APPLICATION_JSON).get(List.class);
+             return customerWebTarget.request(MediaType.APPLICATION_JSON).get(List.class);           
         }catch(Exception e){
             return null;
         }

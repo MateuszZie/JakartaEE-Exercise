@@ -13,7 +13,7 @@
     <h:body>       
         <h:form style="position: relative; left: 35%; width: 450px; top: 30px">
             <p:growl id="growl" showDetail="true" sticky="true" />
-            <p:panel header="Customer">
+            <p:panel style="text-align: center" header="Customer" >
             <h:panelGrid columns="2" cellpadding="7">
                 <p:outputLabel for="identyfikator" value="Identyfikator"/>
                 <p:inputText id="identyfikator" value="#{editCustomer.identyfikator}" required="true" requiredMessage="Identyfikator must be set" validatorMessage="Identyfikator must be less ther 32 characters">
@@ -25,7 +25,7 @@
                 <p:inputText value="#{editCustomer.email}" />
                 <h:outputText value="PhoneNumber"/>
                 <p:inputText value="#{editCustomer.phoneNumber}" />
-                <p:commandButton style="position: relative; left: 120px;" value="#{apiService.buttonValue}" action="#{apiService.addUpdateCustomer(editCustomer)}" update="growl"/>
+                <p:commandButton style="position: relative; left: 150px;" value="#{apiService.buttonValue}" action="#{apiService.addUpdateCustomer(editCustomer)}" update="growl"/>
             </h:panelGrid>
             </p:panel>
         </h:form>
