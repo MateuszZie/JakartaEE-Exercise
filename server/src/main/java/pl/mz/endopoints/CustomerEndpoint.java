@@ -9,7 +9,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -33,6 +32,7 @@ public class CustomerEndpoint {
 
     @GET
     public List<Customer> getCustmers() {
+
         return queryService.getCustomers();
     }
 
@@ -45,6 +45,7 @@ public class CustomerEndpoint {
     @GET
     @Path("{identifier}")
     public Customer getCustomer(@PathParam("identifier") String id) {
+
         Customer customer = queryService.getCustomer(id);
         return customer;
     }
@@ -52,12 +53,15 @@ public class CustomerEndpoint {
     @POST
     @Path("new")
     public Customer createCustomer(Customer customer) {
+
         return persistanceService.saveCustomer(customer);
     }
 
     @PUT
     @Path("update")
     public Customer updateCustomer(Customer customer) {
+
+
         return persistanceService.saveCustomer(customer);
     }
 
@@ -67,5 +71,7 @@ public class CustomerEndpoint {
 
         persistanceService.deleteCustomer(id);
     }
+
+
 
 }

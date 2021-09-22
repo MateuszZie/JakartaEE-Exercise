@@ -22,6 +22,7 @@ import lombok.Setter;
 @Named
 @RequestScoped
 public class Customer{
+      
        
     private Long id;
     
@@ -30,4 +31,5 @@ public class Customer{
     private String identyfikator;
     
     private String name, phoneNumber, email;
+    
 }

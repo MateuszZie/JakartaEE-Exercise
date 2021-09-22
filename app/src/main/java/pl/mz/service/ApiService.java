@@ -7,6 +7,9 @@ package pl.mz.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -29,33 +32,64 @@ import pl.mz.domain.Customer;
 @RequestScoped
 @Named
 public class ApiService {
-    
-    private String buttonValue,titleValue;
+
+    private boolean serverBusy;
+
+    private String buttonValue, titleValue;
 
     Client client = ClientBuilder.newClient();
     WebTarget webTarget = client.target("http://localhost:8080/server/api/v1");
 
     public Customer getCustomer(String ident) {
+
         WebTarget customerWebTarget = webTarget.path("customer/" + ident);
-        return customerWebTarget.request(MediaType.APPLICATION_JSON).get(Customer.class);
+        try {
+            Customer customer = customerWebTarget.request(MediaType.APPLICATION_JSON).async().get(Customer.class).get(1, TimeUnit.SECONDS);
+            setServerBusy(false);
+            return customer;
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            System.out.println(e.getMessage());
+            setServerBusy(true);
+            return null;
+        }
+
     }
 
     public List<Customer> getAllCustomer() {
         WebTarget customerWebTarget = webTarget.path("customer");
-        return customerWebTarget.request(MediaType.APPLICATION_JSON).get(List.class);
-    }
+        try{
+             return customerWebTarget.request(MediaType.APPLICATION_JSON).get(List.class);
+        }catch(Exception e){
+            return null;
+        }
+           
+        }
+    
 
     public String addUpdateCustomer(Customer customer) {
         Customer baseCustomer = getCustomer(customer.getIdentyfikator());
+        if (serverBusy) {
+            return serverError();
+        }
         if (customer.getId() == null && baseCustomer == null) {
             WebTarget customerWebTarget = webTarget.path("customer/new");
-            customerWebTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(customer, MediaType.APPLICATION_JSON));
+            try {
+                customerWebTarget.request(MediaType.APPLICATION_JSON).async().post(Entity.entity(customer, MediaType.APPLICATION_JSON)).get(1, TimeUnit.SECONDS);
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                System.out.println(e.getMessage());
+                return serverError();
+            }
             return "index";
         } else if (customer.getId() == null && baseCustomer != null) {
             return displayError(customer.getIdentyfikator());
         } else if ((customer.getId() != null && baseCustomer == null) || customer.getId().equals(baseCustomer.getId())) {
             WebTarget customerWebTarget = webTarget.path("customer/update");
-            customerWebTarget.request(MediaType.APPLICATION_JSON).put(Entity.entity(customer, MediaType.APPLICATION_JSON));
+            try {
+                customerWebTarget.request(MediaType.APPLICATION_JSON).async().put(Entity.entity(customer, MediaType.APPLICATION_JSON)).get(1, TimeUnit.SECONDS);
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                System.out.println(e.getMessage());
+                return serverError();
+            }
             return "index";
         }
         return displayError(customer.getIdentyfikator());
@@ -63,8 +97,13 @@ public class ApiService {
 
     public String deleteCustomer(Long id) {
         WebTarget customerWebTarget = webTarget.path("customer/delete/" + id.toString());
-        customerWebTarget.request(MediaType.APPLICATION_JSON).delete();
-        return "index.xhtml";
+        try {
+            customerWebTarget.request(MediaType.APPLICATION_JSON).async().delete().get(1, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            System.out.println(e.getMessage());
+            return serverError();
+        }
+        return "index";
     }
 
     public String formCustomer(String identyfikator) {
@@ -77,6 +116,9 @@ public class ApiService {
             setButtonValue("Update");
             setTitleValue("Update Customer");
             Customer customer = getCustomer(identyfikator);
+            if (serverBusy) {
+                return serverError();
+            }
             sessionMapObj.put("editCustomer", customer);
         }
         return "customerForm";
@@ -87,5 +129,14 @@ public class ApiService {
         myMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
         FacesContext.getCurrentInstance().addMessage(null, myMessage);
         return "customerForm";
+    }
+
+    private String serverError() {
+        FacesMessage myMessage = new FacesMessage("Server is busy or not avaiable please try again letter", "");
+        myMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+        FacesContext.getCurrentInstance().addMessage(null, myMessage);        
+        System.out.println(FacesContext.getCurrentInstance().getViewRoot().getViewId());
+        return FacesContext.getCurrentInstance().getViewRoot().getViewId();
+
     }
 }
