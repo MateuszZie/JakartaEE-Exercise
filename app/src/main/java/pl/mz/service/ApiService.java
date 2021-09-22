@@ -16,15 +16,21 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import lombok.Getter;
+import lombok.Setter;
 import pl.mz.domain.Customer;
 
 /**
  *
  * @author Mateusz
  */
+@Getter
+@Setter
 @RequestScoped
 @Named
 public class ApiService {
+    
+    private String buttonValue,titleValue;
 
     Client client = ClientBuilder.newClient();
     WebTarget webTarget = client.target("http://localhost:8080/server/api/v1");
@@ -64,8 +70,12 @@ public class ApiService {
     public String formCustomer(String identyfikator) {
         Map<String, Object> sessionMapObj = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
         if ("".equals(identyfikator)) {
+            setButtonValue("Add");
+            setTitleValue("Add Customer");
             sessionMapObj.put("editCustomer", new Customer());
         } else {
+            setButtonValue("Update");
+            setTitleValue("Update Customer");
             Customer customer = getCustomer(identyfikator);
             sessionMapObj.put("editCustomer", customer);
         }

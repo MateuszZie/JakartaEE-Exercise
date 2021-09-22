@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
-        <title>Add/Update Customer</title>
+        <title>#{apiService.titleValue}</title>
         <script>  
 </script>  
     </h:head>
@@ -25,7 +25,7 @@
                 <p:inputText value="#{editCustomer.email}" />
                 <h:outputText value="PhoneNumber"/>
                 <p:inputText value="#{editCustomer.phoneNumber}" />
-                <p:commandButton style="position: relative; left: 120px;" value="Add/Update" action="#{apiService.addUpdateCustomer(editCustomer)}" update="growl"/>
+                <p:commandButton style="position: relative; left: 120px;" value="#{apiService.buttonValue}" action="#{apiService.addUpdateCustomer(editCustomer)}" update="growl"/>
             </h:panelGrid>
             </p:panel>
         </h:form>
