@@ -13,10 +13,9 @@
             <p:growl id="growl" showDetail="true" sticky="true" />
             <p:panel style="text-align: center" header="Customer List">
                 <p:commandButton value="New Customer" action="#{apiService.formCustomer('')}" />
-
-
-
-                <p:dataTable  value="#{apiService.allCustomer}" var="cust">
+                <br></br>
+                <p:outputLabel style="color: red" rendered="#{apiService.allCustomer == null}" value=" Connection problem please try again leter"/>
+                <p:dataTable rendered="#{apiService.allCustomer != null}" value="#{apiService.allCustomer}" var="cust">
                     <p:column style="text-align: center" headerText="Id">
                         <h:outputText value="#{cust.id}" />
                     </p:column>

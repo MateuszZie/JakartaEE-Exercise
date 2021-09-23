@@ -33,7 +33,6 @@ public class CustomerEndpoint {
 
     @GET
     public List<Customer> getCustmers() {
-//            throw new NotAcceptableException();
         return queryService.getCustomers();
     }
 
