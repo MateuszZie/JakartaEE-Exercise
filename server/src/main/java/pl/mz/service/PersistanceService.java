@@ -5,29 +5,30 @@
  */
 package pl.mz.service;
 
-import javax.ejb.Stateless;
+import java.lang.Class;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import pl.mz.entities.Customer;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.java.Log;
+import pl.mz.entities.AbstractEntity;
 
 /**
  *
  * @author Mateusz
+ * @param <T>
  */
-@Stateless
-public class PersistanceService {
+@Getter
+@Log
+public abstract class PersistanceService<T extends AbstractEntity> {
    
    @Inject
    EntityManager entityManager;
    
    
-   public Customer saveCustomer(Customer customer){
-       if(customer.getId()==null) entityManager.persist(customer);
-       else entityManager.merge(customer);
-       return customer;
-   }
-   public void deleteCustomer(Long id){
-       Customer customer = entityManager.find(Customer.class, id);
-       entityManager.remove(customer);
+   public T saveCustomer(T entity){
+       if(entity.getId()==null) entityManager.persist(entity);
+       else entityManager.merge(entity);
+       return entity;
    }
 }

@@ -9,13 +9,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import pl.mz.entities.Customer;
-import pl.mz.service.PersistanceService;
+import pl.mz.service.CutomerRepo;
 import pl.mz.service.QueryService;
 
 /**
@@ -29,7 +28,7 @@ public class CustomerEndpoint {
     QueryService queryService;
 
     @Inject
-    PersistanceService persistanceService;
+    CutomerRepo persistanceService;
 
     @GET
     public List<Customer> getCustmers() {
@@ -39,7 +38,7 @@ public class CustomerEndpoint {
     @GET
     @Path("identy")
     public List<String> getIdentyfikators() {
-        return queryService.getIdentyfikators();
+        return queryService.getIdentifiers();
     }
 
     @GET
@@ -59,10 +58,8 @@ public class CustomerEndpoint {
 
     @PUT
     @Path("update")
-    public Customer updateCustomer(Customer customer) {
-
-
-        return persistanceService.saveCustomer(customer);
+    public void updateCustomer(pl.mz.DTO.Customer customer) {
+        queryService.geCustomerById(customer);
     }
 
     @DELETE
